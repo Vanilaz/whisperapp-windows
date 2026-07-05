@@ -15,7 +15,10 @@
     <Product>Whisper</Product>
     <Company>Gamezxz</Company>
     <Copyright>© 2026 Gamezxz</Copyright>
-    <InvariantGlobalization>true</InvariantGlobalization>
+    <!-- Do NOT set InvariantGlobalization: it disallows any real culture, and WPF needs
+         one to resolve the current keyboard input language whenever a text field is
+         focused. On a non-English Windows locale (e.g. Thai, LCID 0x041e) that throws
+         CultureNotFoundException the instant you click into any TextBox/PasswordBox. -->
     <!-- Menu-bar-only app: no console window -->
     <StartupObject>WhisperApp.App</StartupObject>
   </PropertyGroup>
