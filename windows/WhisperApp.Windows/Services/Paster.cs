@@ -52,7 +52,15 @@ public static class Paster
             KeyInput(vkV, down: false),
             KeyInput(vkControl, down: false),
         };
-        SendInput((uint)inputs.Length, inputs, Marshal.SizeOf<INPUT>());
+        uint sent = SendInput((uint)inputs.Length, inputs, Marshal.SizeOf<INPUT>());
+        if (sent != inputs.Length)
+        {
+            // SendInput rejects the whole call (returns 0) if cbSize doesn't exactly match
+            // what Windows expects for INPUT on the current bitness - which silently means
+            // "nothing was typed" with no exception thrown anywhere.
+            int err = Marshal.GetLastWin32Error();
+            System.Diagnostics.Debug.WriteLine($"[Paster] SendInput sent {sent}/{inputs.Length} events (Win32 error {err})");
+        }
     }
 
     private static INPUT KeyInput(int vk, bool down) => new()
@@ -84,10 +92,36 @@ public static class Paster
         public IntPtr dwExtraInfo;
     }
 
+    [StructLayout(LayoutKind.Sequential)]
+    private struct MOUSEINPUT
+    {
+        public int dx;
+        public int dy;
+        public uint mouseData;
+        public uint dwFlags;
+        public uint time;
+        public IntPtr dwExtraInfo;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    private struct HARDWAREINPUT
+    {
+        public uint uMsg;
+        public ushort wParamL;
+        public ushort wParamH;
+    }
+
+    // The native INPUT union must be sized to fit its LARGEST member (MOUSEINPUT, which is
+    // bigger than KEYBDINPUT on both x86 and x64) even though we only ever populate `ki`.
+    // Declaring only `ki` here made this struct too small, so Marshal.SizeOf<INPUT>() didn't
+    // match what SendInput's cbSize parameter must equal - SendInput checks that and silently
+    // returns 0 (sends nothing) on a mismatch, with no exception anywhere in managed code.
     [StructLayout(LayoutKind.Explicit)]
     private struct InputUnion
     {
+        [FieldOffset(0)] public MOUSEINPUT mi;
         [FieldOffset(0)] public KEYBDINPUT ki;
+        [FieldOffset(0)] public HARDWAREINPUT hi;
     }
 
     [StructLayout(LayoutKind.Sequential)]
