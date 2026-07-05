@@ -1,4 +1,4 @@
-; Inno Setup script for Whisper — produces a per-user installer with an optional
+; Inno Setup script for Whisper - produces a per-user installer with an optional
 ; "run at startup" shortcut. Build with: iscc installer.iss /DPublishDir=dist
 ; (PublishDir must contain the output of publish.ps1, i.e. Whisper.exe + deps)
 
@@ -21,7 +21,7 @@ AppPublisherURL={#MyAppURL}
 DefaultDirName={autopf}\{#MyAppName}
 DefaultGroupName={#MyAppName}
 DisableProgramGroupPage=yes
-; Per-user install — matches the app manifest's asInvoker execution level (no UAC prompt).
+; Per-user install - matches the app manifest's asInvoker execution level (no UAC prompt).
 PrivilegesRequired=lowest
 OutputBaseFilename=Whisper-Setup
 OutputDir=.
@@ -39,7 +39,7 @@ Name: "startupicon"; Description: "Start Whisper automatically when you sign in"
 [Files]
 Source: "{#PublishDir}\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
 ; publish.ps1 produces a single self-contained exe, so there's normally nothing else to
-; copy — this just picks up any stray file if that ever changes (single-file publish
+; copy - this just picks up any stray file if that ever changes (single-file publish
 ; failing, etc.) without breaking the build when it doesn't match anything.
 Source: "{#PublishDir}\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs skipifsourcedoesntexist; Excludes: "{#MyAppExeName}"
 

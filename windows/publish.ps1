@@ -14,7 +14,7 @@ Set-Location $PSScriptRoot
 $proj = "WhisperApp.Windows/WhisperApp.Windows.csproj"
 $out = Join-Path $PSScriptRoot $OutDir
 
-# Wipe old output first — otherwise leftovers from a previous (non-single-file) publish
+# Wipe old output first - otherwise leftovers from a previous (non-single-file) publish
 # linger next to the new exe and it looks like the single-file publish didn't work.
 if (Test-Path $out) { Remove-Item $out -Recurse -Force }
 
@@ -41,6 +41,6 @@ if ($iscc) {
     Write-Host "Building installer with Inno Setup..."
     & $iscc.Path "installer.iss" "/DPublishDir=$out"
 } else {
-    Write-Host "Inno Setup (ISCC.exe) not found on PATH — skipping installer build." -ForegroundColor Yellow
+    Write-Host "Inno Setup (ISCC.exe) not found on PATH - skipping installer build." -ForegroundColor Yellow
     Write-Host "Install from https://jrsoftware.org/isinfo.php to produce a Whisper-Setup.exe installer."
 }
