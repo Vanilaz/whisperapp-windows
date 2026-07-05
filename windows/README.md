@@ -3,6 +3,8 @@
 A Windows system-tray port of [WhisperApp](../README.md) (originally macOS/Swift): press a
 hotkey, speak, and the corrected text is pasted into whatever you're typing.
 
+📖 คู่มือภาษาไทยสำหรับผู้ใช้ทั่วไป (ไม่ต้องอ่านโค้ด): [คู่มือการใช้งาน.md](คู่มือการใช้งาน.md)
+
 Functionally equivalent to the current macOS build (v1.2, Groq-only): global hotkey
 (hold-to-talk or toggle), Groq Whisper transcription, Groq Llama text correction, auto-paste,
 floating waveform/status overlay, and a tray menu with language + STT/correction toggles.
