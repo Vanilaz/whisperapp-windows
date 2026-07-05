@@ -24,6 +24,15 @@
     <PackageReference Include="NAudio" Version="2.2.1" />
   </ItemGroup>
 
+  <!-- UseWPF + UseWindowsForms together make the SDK implicitly global-using both
+       System.Windows.* and System.Windows.Forms project-wide, which collide on
+       Application/UserControl/KeyEventArgs/etc. Only TrayIconManager.cs needs WinForms
+       (for NotifyIcon), and it already has its own explicit `using System.Windows.Forms;`,
+       so drop the implicit global one to resolve the ambiguity everywhere else. -->
+  <ItemGroup>
+    <Using Remove="System.Windows.Forms" />
+  </ItemGroup>
+
   <ItemGroup>
     <Resource Include="Assets\icon.ico" />
   </ItemGroup>

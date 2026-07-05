@@ -1,3 +1,5 @@
+using System.IO;
+
 namespace WhisperApp.Services;
 
 /// LLM providers for text correction. Most use the OpenAI-compatible chat/completions API

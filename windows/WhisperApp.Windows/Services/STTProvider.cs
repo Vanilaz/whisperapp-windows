@@ -1,3 +1,5 @@
+using System.IO;
+
 namespace WhisperApp.Services;
 
 /// Cloud Speech-to-Text providers.

@@ -1,3 +1,5 @@
+using System.IO;
+
 namespace WhisperApp.Services;
 
 /// Manages the app's local data directory and environment-variable lookups.

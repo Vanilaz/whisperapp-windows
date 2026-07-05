@@ -9,7 +9,7 @@ namespace WhisperApp.Views;
 /// Captures a key combination (or a lone modifier key, like Right Ctrl) and displays it.
 /// Windows delivers modifier keys through ordinary KeyDown/KeyUp — no special-casing needed
 /// like macOS's separate flagsChanged handler.
-public partial class HotkeyRecorderControl : UserControl
+public partial class HotkeyRecorderControl : System.Windows.Controls.UserControl
 {
     public event Action<HotkeyConfig>? Captured;
     public event Action? RecordingCancelled;
@@ -37,7 +37,7 @@ public partial class HotkeyRecorderControl : UserControl
         UpdateDisplay();
     }
 
-    protected override void OnPreviewKeyDown(KeyEventArgs e)
+    protected override void OnPreviewKeyDown(System.Windows.Input.KeyEventArgs e)
     {
         if (!_isRecording)
         {

@@ -1,3 +1,4 @@
+using System.IO;
 using NAudio.Wave;
 
 namespace WhisperApp.Services;
@@ -83,7 +84,7 @@ public class AudioRecorder
         LevelChanged?.Invoke(level);
     }
 
-    private void OnNAudioRecordingStopped(object? sender, StoppedRecordingEventArgs e)
+    private void OnNAudioRecordingStopped(object? sender, StoppedEventArgs e)
     {
         _writer?.Dispose();
         _writer = null;
