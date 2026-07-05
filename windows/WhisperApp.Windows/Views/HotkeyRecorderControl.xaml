@@ -1,0 +1,11 @@
+<UserControl x:Class="WhisperApp.Views.HotkeyRecorderControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Focusable="True" Width="180" Height="30">
+    <Border x:Name="Root" CornerRadius="6" BorderThickness="1"
+            Background="{DynamicResource {x:Static SystemColors.ControlLightLightBrushKey}}"
+            BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}">
+        <TextBlock x:Name="DisplayText" Text="" FontSize="13" FontWeight="Medium"
+                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+    </Border>
+</UserControl>

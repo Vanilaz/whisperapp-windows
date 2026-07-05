@@ -1,8 +1,11 @@
 # WhisperApp
 
-A macOS menu-bar speech-to-text dictation app — press a hotkey, speak, and the corrected text is pasted into whatever you're typing. Think Wispr Flow, built on open STT/LLM APIs you control.
+A menu-bar / system-tray speech-to-text dictation app — press a hotkey, speak, and the corrected text is pasted into whatever you're typing. Think Wispr Flow, built on open STT/LLM APIs you control.
 
 ![WhisperApp](assets/logo.png)
+
+- **macOS** (Swift/SwiftUI): this directory — see below
+- **Windows** (.NET/WPF): [`windows/`](windows/README.md)
 
 ## Features
 

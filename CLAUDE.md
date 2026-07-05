@@ -26,3 +26,11 @@ macOS menu-bar dictation app (Swift) — กด Fn ค้างแล้วพ�
 
 - Submit sitemap ใน Google Search Console (user ต้องทำเอง)
 - JSON-LD `softwareVersion` + `downloadUrl` ใน `docs/index.html` ต้องอัปเดตทุกครั้งที่ออกเวอร์ชันใหม่
+
+## Windows port
+
+- อยู่ที่ `windows/` (แยกจาก mac source ที่ `Sources/` — ไม่ได้แทนที่กัน, คนละแพลตฟอร์ม คนละ build)
+- Stack: .NET 8 / WPF, tray-only ผ่าน `System.Windows.Forms.NotifyIcon`
+- Build: `cd windows && ./run.ps1` (dev) หรือ `./publish.ps1` (self-contained single-file exe + installer ถ้ามี Inno Setup)
+- รายละเอียด/ความต่างจาก mac (hotkey default, permission model, ฯลฯ) → `windows/README.md`
+- **ยังไม่ได้ build/test จริงบน Windows** — เขียนจาก Linux sandbox ที่ไม่มี Windows/dotnet SDK ให้ compile-check ได้ ต้อง verify บนเครื่อง Windows จริงก่อนใช้งาน/แจกจ่าย

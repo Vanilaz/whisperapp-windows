@@ -1,0 +1,61 @@
+<Window x:Class="WhisperApp.Views.FloatingStatusWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Whisper"
+        Width="300" Height="98"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent"
+        ShowInTaskbar="False"
+        ResizeMode="NoResize"
+        Topmost="True"
+        ShowActivated="False"
+        Focusable="False">
+
+    <Border CornerRadius="20" Background="#DD1E1E22" BorderBrush="#22FFFFFF" BorderThickness="1"
+            Margin="10" Padding="16,10">
+        <Grid>
+            <!-- Recording: live waveform bars -->
+            <ItemsControl x:Name="WaveformBars"
+                          HorizontalAlignment="Center" VerticalAlignment="Center"
+                          Visibility="Collapsed">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border Width="4" Margin="1.5,0" CornerRadius="2"
+                                VerticalAlignment="Center" Height="{Binding}">
+                            <Border.Background>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                    <GradientStop Color="#4FC3F7" Offset="0"/>
+                                    <GradientStop Color="#2979FF" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Border.Background>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <!-- Other stages: icon/spinner + text pill -->
+            <StackPanel x:Name="StatusPanel" Orientation="Horizontal"
+                        HorizontalAlignment="Center" VerticalAlignment="Center"
+                        Visibility="Collapsed">
+                <TextBlock x:Name="Spinner" Text="&#x25D0;" FontSize="16" Margin="0,0,10,0"
+                           Foreground="White" VerticalAlignment="Center"
+                           RenderTransformOrigin="0.5,0.5" Visibility="Collapsed">
+                    <TextBlock.RenderTransform>
+                        <RotateTransform x:Name="SpinnerRotation" Angle="0"/>
+                    </TextBlock.RenderTransform>
+                </TextBlock>
+                <TextBlock x:Name="StageIcon" Text="" FontSize="16" Margin="0,0,10,0"
+                           VerticalAlignment="Center"/>
+                <TextBlock x:Name="StatusText" Text="" FontSize="13" FontWeight="SemiBold"
+                           Foreground="White" VerticalAlignment="Center"
+                           TextTrimming="CharacterEllipsis" MaxWidth="220"/>
+            </StackPanel>
+        </Grid>
+    </Border>
+</Window>

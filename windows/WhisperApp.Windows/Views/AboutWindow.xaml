@@ -1,0 +1,42 @@
+<Window x:Class="WhisperApp.Views.AboutWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="About Whisper" Width="340" Height="440"
+        ResizeMode="NoResize" WindowStartupLocation="CenterScreen"
+        SizeToContent="Height">
+    <StackPanel Margin="28" HorizontalAlignment="Center">
+        <Image x:Name="AppIcon" Width="96" Height="96" Margin="0,0,0,14"/>
+
+        <TextBlock Text="Whisper" FontSize="20" FontWeight="Bold"
+                   HorizontalAlignment="Center" Margin="0,0,0,2"/>
+        <TextBlock x:Name="VersionText" Text="Version 1.0" FontSize="11" Foreground="Gray"
+                   HorizontalAlignment="Center" Margin="0,0,0,14"/>
+
+        <TextBlock Text="Speak, and your PC types for you.&#10;Hold the hotkey to talk — transcribed by Whisper, polished by AI."
+                   FontSize="13" Foreground="Gray" TextWrapping="Wrap" TextAlignment="Center"
+                   Margin="0,0,0,14"/>
+
+        <Separator Margin="30,0,30,14"/>
+
+        <TextBlock Text="Created by" FontSize="10" Foreground="Gray" HorizontalAlignment="Center"/>
+        <TextBlock Text="Gamezxz 🧙‍♂️" FontSize="15" FontWeight="SemiBold"
+                   HorizontalAlignment="Center" Margin="0,2,0,2"/>
+        <TextBlock Text="Developer · Bitcoiner · Bangkok" FontSize="12" Foreground="Gray"
+                   HorizontalAlignment="Center" Margin="0,0,0,14"/>
+
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,14">
+            <TextBlock Margin="0,0,14,0">
+                <Hyperlink NavigateUri="https://cointh.com" RequestNavigate="OnNavigate">cointh.com</Hyperlink>
+            </TextBlock>
+            <TextBlock Margin="0,0,14,0">
+                <Hyperlink NavigateUri="https://github.com/Gamezxz/WhisperApp" RequestNavigate="OnNavigate">GitHub</Hyperlink>
+            </TextBlock>
+            <TextBlock>
+                <Hyperlink NavigateUri="https://gamezxz.github.io/WhisperApp/" RequestNavigate="OnNavigate">Website</Hyperlink>
+            </TextBlock>
+        </StackPanel>
+
+        <TextBlock Text="© 2026 Gamezxz — free &amp; open source" FontSize="10" Foreground="Gray"
+                   HorizontalAlignment="Center"/>
+    </StackPanel>
+</Window>
