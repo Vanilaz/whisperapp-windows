@@ -88,8 +88,8 @@ public partial class HotkeyRecorderControl : System.Windows.Controls.UserControl
         if (_isRecording)
         {
             DisplayText.Text = "Press keys…";
-            Root.Background = new SolidColorBrush(Color.FromArgb(38, 0, 122, 255));
-            Root.BorderBrush = Brushes.DodgerBlue;
+            Root.Background = new SolidColorBrush(System.Windows.Media.Color.FromArgb(38, 0, 122, 255));
+            Root.BorderBrush = System.Windows.Media.Brushes.DodgerBlue;
             Root.BorderThickness = new Thickness(2);
         }
         else

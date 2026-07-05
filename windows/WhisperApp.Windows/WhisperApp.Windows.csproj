@@ -25,12 +25,14 @@
   </ItemGroup>
 
   <!-- UseWPF + UseWindowsForms together make the SDK implicitly global-using both
-       System.Windows.* and System.Windows.Forms project-wide, which collide on
-       Application/UserControl/KeyEventArgs/etc. Only TrayIconManager.cs needs WinForms
-       (for NotifyIcon), and it already has its own explicit `using System.Windows.Forms;`,
-       so drop the implicit global one to resolve the ambiguity everywhere else. -->
+       System.Windows.*/System.Drawing and System.Windows.Forms project-wide, which collide
+       on Application/UserControl/KeyEventArgs/Brushes/Color/etc. Only TrayIconManager.cs
+       needs the WinForms/Drawing types (NotifyIcon, Icon), and it already has its own
+       explicit `using System.Windows.Forms;` + `using System.Drawing;`, so drop both
+       implicit globals to resolve the ambiguity everywhere else. -->
   <ItemGroup>
     <Using Remove="System.Windows.Forms" />
+    <Using Remove="System.Drawing" />
   </ItemGroup>
 
   <ItemGroup>
