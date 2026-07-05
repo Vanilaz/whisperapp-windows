@@ -61,7 +61,8 @@ public class HotkeyManager
     {
         if (_hookId != IntPtr.Zero) return;
         _proc = HookCallback;
-        using var curModule = System.Diagnostics.Process.GetCurrentProcess().MainModule;
+        using var curProcess = System.Diagnostics.Process.GetCurrentProcess();
+        using var curModule = curProcess.MainModule;
         _hookId = SetWindowsHookEx(WH_KEYBOARD_LL, _proc,
             GetModuleHandle(curModule?.ModuleName), 0);
         if (_hookId == IntPtr.Zero)

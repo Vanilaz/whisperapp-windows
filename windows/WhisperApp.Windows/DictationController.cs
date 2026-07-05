@@ -51,8 +51,14 @@ public class DictationController
         }
         else
         {
-            SetStatus("Microphone unavailable");
-            SetStage(Stage.Error("Microphone unavailable"));
+            const string msg = "Microphone unavailable";
+            SetStatus(msg);
+            var errorStage = Stage.Error(msg);
+            SetStage(errorStage);
+            // Start() isn't async, so fire-and-forget the revert - otherwise this overlay
+            // would stay stuck forever (unlike every other error/done stage, which already
+            // schedules its own return to idle).
+            _ = RevertToIdleAfterDelay(errorStage, TimeSpan.FromMilliseconds(1500));
         }
     }
 
@@ -67,6 +73,31 @@ public class DictationController
     private async Task HandleAudioAsync(string filePath)
     {
         _processing = true;
+        try
+        {
+            await RunPipelineAsync(filePath);
+        }
+        catch (Exception ex)
+        {
+            // Belt and suspenders: TranscribeAsync/CorrectAsync already catch their own
+            // errors and return null, but if anything unexpected still throws here, we must
+            // not leave _processing stuck true forever - that would permanently disable the
+            // hotkey ("Start" no-ops while _processing is true) until the app is restarted.
+            System.Diagnostics.Debug.WriteLine($"[DictationController] Unexpected error: {ex}");
+            const string msg = "Unexpected error";
+            SetStatus(msg);
+            var errorStage = Stage.Error(msg);
+            SetStage(errorStage);
+            await RevertToIdleAfterDelay(errorStage, TimeSpan.FromMilliseconds(1500));
+        }
+        finally
+        {
+            _processing = false;
+        }
+    }
+
+    private async Task RunPipelineAsync(string filePath)
+    {
         var lang = Language;
 
         SetStatus("Transcribing…");
@@ -85,12 +116,11 @@ public class DictationController
         var text = raw != null ? StripSoundAnnotations(raw) : "";
         if (string.IsNullOrWhiteSpace(text))
         {
-            _processing = false;
-            SetStatus("No audio detected");
-            SetStage(Stage.Error("No audio detected"));
-            await Task.Delay(1500);
-            if (CurrentStage.Kind == StageKind.Error && CurrentStage.Message == "No audio detected")
-                SetStage(Stage.Idle);
+            const string msg = "No audio detected";
+            SetStatus(msg);
+            var errorStage = Stage.Error(msg);
+            SetStage(errorStage);
+            await RevertToIdleAfterDelay(errorStage, TimeSpan.FromMilliseconds(1500));
             return;
         }
 
@@ -104,14 +134,20 @@ public class DictationController
         }
 
         var snippet = finalText.Length > 28 ? finalText[..28] : finalText;
-        _processing = false;
         SetStatus(snippet);
-        SetStage(Stage.Done(snippet));
+        var doneStage = Stage.Done(snippet);
+        SetStage(doneStage);
         Paster.Paste(finalText);
 
-        await Task.Delay(1200);
-        if (CurrentStage.Kind == StageKind.Done && CurrentStage.Message == snippet)
-            SetStage(Stage.Idle);
+        await RevertToIdleAfterDelay(doneStage, TimeSpan.FromMilliseconds(1200));
+    }
+
+    /// Waits, then returns to idle only if the stage hasn't already moved on to something
+    /// else in the meantime (e.g. a new recording started before the delay elapsed).
+    private async Task RevertToIdleAfterDelay(Stage expected, TimeSpan delay)
+    {
+        await Task.Delay(delay);
+        if (CurrentStage == expected) SetStage(Stage.Idle);
     }
 
     private void SetStage(Stage s)

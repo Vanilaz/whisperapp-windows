@@ -95,8 +95,12 @@ public partial class HotkeyRecorderControl : System.Windows.Controls.UserControl
         else
         {
             DisplayText.Text = _current.DisplayString;
-            Root.ClearValue(Border.BackgroundProperty);
-            Root.ClearValue(Border.BorderBrushProperty);
+            // Re-assign explicitly rather than ClearValue: ClearValue would revert to the
+            // property's default (no brush at all), not the DynamicResource set in XAML,
+            // since that resource reference was already overwritten by the "recording" branch
+            // above the first time this control ever entered the recording state.
+            Root.Background = System.Windows.SystemColors.ControlLightLightBrush;
+            Root.BorderBrush = System.Windows.SystemColors.ActiveBorderBrush;
             Root.BorderThickness = new Thickness(1);
         }
     }
