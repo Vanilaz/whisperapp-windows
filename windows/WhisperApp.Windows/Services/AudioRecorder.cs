@@ -11,8 +11,8 @@ public class AudioRecorder
 {
     public bool IsRecording { get; private set; }
 
-    /// Raised with the finished WAV file's path once recording stops.
-    public event Action<string>? RecordingStopped;
+    /// Raised with the finished WAV file's path and recording duration once recording stops.
+    public event Action<string, TimeSpan>? RecordingStopped;
     /// Real-time 0..1 audio level for the waveform display.
     public event Action<float>? LevelChanged;
 
@@ -21,6 +21,7 @@ public class AudioRecorder
     private WaveInEvent? _waveIn;
     private WaveFileWriter? _writer;
     private string? _tempFilePath;
+    private System.Diagnostics.Stopwatch? _stopwatch;
 
     public void StartRecording()
     {
@@ -40,6 +41,7 @@ public class AudioRecorder
             _waveIn.DataAvailable += OnDataAvailable;
             _waveIn.RecordingStopped += OnNAudioRecordingStopped;
 
+            _stopwatch = System.Diagnostics.Stopwatch.StartNew();
             _waveIn.StartRecording();
             IsRecording = true;
             System.Diagnostics.Debug.WriteLine($"[AudioRecorder] Recording started -> {_tempFilePath}");
@@ -93,6 +95,9 @@ public class AudioRecorder
         IsRecording = false;
         LevelChanged?.Invoke(0f);
 
+        var duration = _stopwatch?.Elapsed ?? TimeSpan.Zero;
+        _stopwatch = null;
+
         if (e.Exception != null)
         {
             System.Diagnostics.Debug.WriteLine($"[AudioRecorder] Recording stopped with error: {e.Exception.Message}");
@@ -103,8 +108,8 @@ public class AudioRecorder
 
         if (path != null && File.Exists(path))
         {
-            System.Diagnostics.Debug.WriteLine($"[AudioRecorder] Recording stopped -> {path}");
-            RecordingStopped?.Invoke(path);
+            System.Diagnostics.Debug.WriteLine($"[AudioRecorder] Recording stopped -> {path} ({duration.TotalMilliseconds:F0}ms)");
+            RecordingStopped?.Invoke(path, duration);
         }
     }
 
@@ -115,6 +120,7 @@ public class AudioRecorder
         _waveIn?.Dispose();
         _waveIn = null;
         _tempFilePath = null;
+        _stopwatch = null;
         IsRecording = false;
     }
 }

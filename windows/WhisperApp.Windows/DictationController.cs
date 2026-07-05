@@ -30,9 +30,15 @@ public class DictationController
     private readonly TextCorrectionService _correction = new();
     private volatile bool _processing;
 
+    /// Below this, treat it as an accidental tap (key bounced, released a beat too early)
+    /// rather than real speech - Whisper-family models are known to hallucinate plausible-
+    /// looking phrases out of near-silent or extremely short clips, which then get "corrected"
+    /// into fluent-looking text and pasted, even though nothing was actually said.
+    private static readonly TimeSpan MinRecordingDuration = TimeSpan.FromMilliseconds(350);
+
     public DictationController()
     {
-        _recorder.RecordingStopped += path => _ = HandleAudioAsync(path);
+        _recorder.RecordingStopped += (path, duration) => _ = HandleAudioAsync(path, duration);
     }
 
     public void Toggle()
@@ -70,11 +76,19 @@ public class DictationController
         SetStage(Stage.Transcribing);
     }
 
-    private async Task HandleAudioAsync(string filePath)
+    private async Task HandleAudioAsync(string filePath, TimeSpan duration)
     {
         _processing = true;
         try
         {
+            if (duration < MinRecordingDuration)
+            {
+                // Too short to be real speech - discard without ever calling the API (saves
+                // a request and avoids Whisper hallucinating text out of near-nothing).
+                try { File.Delete(filePath); } catch { /* best effort cleanup */ }
+                SetStage(Stage.Idle);
+                return;
+            }
             await RunPipelineAsync(filePath);
         }
         catch (Exception ex)
