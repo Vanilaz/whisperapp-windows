@@ -2,6 +2,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Threading;
 using WhisperApp.Models;
 
 namespace WhisperApp.Views;
@@ -32,9 +33,19 @@ public partial class HotkeyRecorderControl : System.Windows.Controls.UserControl
     public void BeginRecording()
     {
         _isRecording = true;
-        Focus();
-        Keyboard.Focus(this);
         UpdateDisplay();
+
+        // BeginRecording() is called from the "Change" button's own Click handler. Taking
+        // focus synchronously right here doesn't stick - Button's own click/mouse-up
+        // processing hasn't finished yet and re-asserts focus onto itself right after this
+        // handler returns, silently undoing Keyboard.Focus(this). Every keypress then goes
+        // to the button (which ignores it) instead of us, so nothing ever gets captured.
+        // Deferring to Input priority runs this after the button's own focus handling settles.
+        Dispatcher.BeginInvoke(new Action(() =>
+        {
+            Focus();
+            Keyboard.Focus(this);
+        }), DispatcherPriority.Input);
     }
 
     protected override void OnPreviewKeyDown(System.Windows.Input.KeyEventArgs e)
