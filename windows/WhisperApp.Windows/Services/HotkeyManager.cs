@@ -66,7 +66,7 @@ public class HotkeyManager
             GetModuleHandle(curModule?.ModuleName), 0);
         if (_hookId == IntPtr.Zero)
         {
-            Console.WriteLine("[HotkeyManager] Failed to install keyboard hook");
+            System.Diagnostics.Debug.WriteLine("[HotkeyManager] Failed to install keyboard hook");
         }
     }
 
@@ -91,7 +91,7 @@ public class HotkeyManager
             if (isDown || isUp)
             {
                 try { HandleKey(vkCode, isDown); }
-                catch (Exception ex) { Console.WriteLine($"[HotkeyManager] Handler error: {ex.Message}"); }
+                catch (Exception ex) { System.Diagnostics.Debug.WriteLine($"[HotkeyManager] Handler error: {ex.Message}"); }
             }
         }
         return CallNextHookEx(_hookId, nCode, wParam, lParam);

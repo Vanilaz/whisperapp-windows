@@ -33,13 +33,13 @@ public class CloudTranscriptionService
         var key = STTSettings.Key(p);
         if (key == null)
         {
-            Console.WriteLine($"[STT] No key found for {p.Name} (configure in Settings or set env {p.EnvKey})");
+            System.Diagnostics.Debug.WriteLine($"[STT] No key found for {p.Name} (configure in Settings or set env {p.EnvKey})");
             return null;
         }
         var endpoint = STTSettings.Endpoint(p);
         if (endpoint == null)
         {
-            Console.WriteLine($"[STT] Invalid endpoint for {p.Name}");
+            System.Diagnostics.Debug.WriteLine($"[STT] Invalid endpoint for {p.Name}");
             return null;
         }
 
@@ -50,7 +50,7 @@ public class CloudTranscriptionService
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"[STT] Could not read audio file: {ex.Message}");
+            System.Diagnostics.Debug.WriteLine($"[STT] Could not read audio file: {ex.Message}");
             return null;
         }
 
@@ -93,12 +93,12 @@ public class CloudTranscriptionService
                 return string.IsNullOrEmpty(text) ? null : text;
             }
 
-            Console.WriteLine($"[STT] {p.Name} response: {body}");
+            System.Diagnostics.Debug.WriteLine($"[STT] {p.Name} response: {body}");
             return null;
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"[STT] {p.Name} error: {ex.Message}");
+            System.Diagnostics.Debug.WriteLine($"[STT] {p.Name} error: {ex.Message}");
             return null;
         }
     }

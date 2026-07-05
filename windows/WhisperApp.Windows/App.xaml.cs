@@ -11,16 +11,29 @@ public partial class App : System.Windows.Application
     {
         base.OnStartup(e);
 
-        // Surface unhandled exceptions instead of silently dying (this is a background
-        // tray app with no window to show a crash dialog by default).
+        // This is a background tray app with no window — without this, any unhandled
+        // exception (here or later, e.g. inside an event handler) kills the process with
+        // no dialog and no console output, and it just silently vanishes from the taskbar.
         DispatcherUnhandledException += (_, args) =>
         {
-            System.Diagnostics.Debug.WriteLine($"[Whisper] Unhandled exception: {args.Exception}");
+            MessageBox.Show(
+                $"Whisper hit an unexpected error:\n\n{args.Exception}",
+                "Whisper — error", MessageBoxButton.OK, MessageBoxImage.Error);
             args.Handled = true;
         };
 
-        _tray = new TrayIconManager();
-        _tray.Initialize();
+        try
+        {
+            _tray = new TrayIconManager();
+            _tray.Initialize();
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show(
+                $"Whisper failed to start:\n\n{ex}",
+                "Whisper — startup failed", MessageBoxButton.OK, MessageBoxImage.Error);
+            Shutdown(1);
+        }
     }
 
     protected override void OnExit(ExitEventArgs e)

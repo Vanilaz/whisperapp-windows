@@ -26,7 +26,7 @@ public class TextCorrectionService
         var key = LLMSettings.Key(p);
         if (key == null)
         {
-            Console.WriteLine($"[LLM] No key found for {p.Name} (configure in Settings or set env {p.EnvKey})");
+            System.Diagnostics.Debug.WriteLine($"[LLM] No key found for {p.Name} (configure in Settings or set env {p.EnvKey})");
             return null;
         }
 
@@ -104,7 +104,7 @@ public class TextCorrectionService
             var content = ExtractText(doc.RootElement, p.Style);
             if (content == null)
             {
-                Console.WriteLine($"[LLM] Correction response: {respBody}");
+                System.Diagnostics.Debug.WriteLine($"[LLM] Correction response: {respBody}");
                 return null;
             }
 
@@ -113,7 +113,7 @@ public class TextCorrectionService
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"[LLM] Correction error: {ex.Message}");
+            System.Diagnostics.Debug.WriteLine($"[LLM] Correction error: {ex.Message}");
             return null;
         }
         finally

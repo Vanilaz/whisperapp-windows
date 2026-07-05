@@ -42,11 +42,11 @@ public class AudioRecorder
 
             _waveIn.StartRecording();
             IsRecording = true;
-            Console.WriteLine($"[AudioRecorder] Recording started -> {_tempFilePath}");
+            System.Diagnostics.Debug.WriteLine($"[AudioRecorder] Recording started -> {_tempFilePath}");
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"[AudioRecorder] Failed to start: {ex.Message}");
+            System.Diagnostics.Debug.WriteLine($"[AudioRecorder] Failed to start: {ex.Message}");
             CleanupAfterFailure();
         }
     }
@@ -66,7 +66,7 @@ public class AudioRecorder
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"[AudioRecorder] Write error: {ex.Message}");
+            System.Diagnostics.Debug.WriteLine($"[AudioRecorder] Write error: {ex.Message}");
         }
 
         int sampleCount = e.BytesRecorded / 2; // 16-bit samples
@@ -95,7 +95,7 @@ public class AudioRecorder
 
         if (e.Exception != null)
         {
-            Console.WriteLine($"[AudioRecorder] Recording stopped with error: {e.Exception.Message}");
+            System.Diagnostics.Debug.WriteLine($"[AudioRecorder] Recording stopped with error: {e.Exception.Message}");
         }
 
         var path = _tempFilePath;
@@ -103,7 +103,7 @@ public class AudioRecorder
 
         if (path != null && File.Exists(path))
         {
-            Console.WriteLine($"[AudioRecorder] Recording stopped -> {path}");
+            System.Diagnostics.Debug.WriteLine($"[AudioRecorder] Recording stopped -> {path}");
             RecordingStopped?.Invoke(path);
         }
     }

@@ -37,7 +37,7 @@ public static class Paster
                 Thread.Sleep(30);
             }
         }
-        Console.WriteLine("[Paster] Could not set clipboard after retries");
+        System.Diagnostics.Debug.WriteLine("[Paster] Could not set clipboard after retries");
     }
 
     private static void SendCtrlV()
