@@ -38,7 +38,10 @@ Name: "startupicon"; Description: "Start Whisper automatically when you sign in"
 
 [Files]
 Source: "{#PublishDir}\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#PublishDir}\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs; Excludes: "{#MyAppExeName}"
+; publish.ps1 produces a single self-contained exe, so there's normally nothing else to
+; copy — this just picks up any stray file if that ever changes (single-file publish
+; failing, etc.) without breaking the build when it doesn't match anything.
+Source: "{#PublishDir}\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs skipifsourcedoesntexist; Excludes: "{#MyAppExeName}"
 
 [Icons]
 Name: "{group}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"

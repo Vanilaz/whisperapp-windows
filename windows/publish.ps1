@@ -14,17 +14,26 @@ Set-Location $PSScriptRoot
 $proj = "WhisperApp.Windows/WhisperApp.Windows.csproj"
 $out = Join-Path $PSScriptRoot $OutDir
 
+# Wipe old output first — otherwise leftovers from a previous (non-single-file) publish
+# linger next to the new exe and it looks like the single-file publish didn't work.
+if (Test-Path $out) { Remove-Item $out -Recurse -Force }
+
 dotnet publish $proj `
     -c Release `
     -r $Runtime `
     --self-contained true `
     -p:PublishSingleFile=true `
     -p:IncludeNativeLibrariesForSelfExtract=true `
+    -p:IncludeAllContentForSelfExtract=true `
     -p:EnableCompressionInSingleFile=true `
+    -p:DebugType=embedded `
+    -p:SatelliteResourceLanguages=en `
+    -p:GenerateDocumentationFile=false `
     -o $out
 
 Write-Host ""
 Write-Host "Published -> $out\Whisper.exe" -ForegroundColor Green
+Get-ChildItem $out | Format-Table Name, Length -AutoSize
 
 # Optional: build an installer if Inno Setup's compiler is on PATH.
 $iscc = Get-Command ISCC.exe -ErrorAction SilentlyContinue
