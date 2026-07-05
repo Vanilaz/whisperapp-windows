@@ -2,10 +2,11 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:local="clr-namespace:WhisperApp.Views"
-        Title="Whisper Settings" Width="460" Height="420"
+        Title="Whisper Settings" Width="460"
+        SizeToContent="Height" MaxHeight="800"
         ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
     <ScrollViewer VerticalScrollBarVisibility="Auto">
-        <StackPanel Margin="20" >
+        <StackPanel Margin="20,20,20,28" >
             <TextBlock Text="Whisper Settings" FontSize="18" FontWeight="Bold" Margin="0,0,0,16"/>
 
             <!-- Hotkey -->
